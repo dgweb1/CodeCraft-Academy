@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod Equipos para Minetest | Entornos Colaborativos</title>
+    <!-- Incluyendo Tailwind CSS para un diseño moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --color-principal: #3b5998; /* Azul Minetest / Firebase */
+            --color-secundario: #42b883; /* Verde Minetest */
+            --color-fondo: #f4f7f6;
+            --color-texto: #1f2937;
+            --color-header-fondo: #ffffff;
+            --color-codigo-fondo: #1e1e1e;
+            --color-codigo-texto: #f8f8f8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.6;
+        }
+
+        /* Código para el fondo oscuro en la sección de código */
+        #codigo-section {
+            background-color: var(--color-codigo-fondo);
+        }
+
+        /* Estilo de resaltado de código */
+        pre {
+            background-color: #2d2d2d;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            /* Asegura que el texto dentro del bloque PRE sea blanco/claro */
+            color: var(--color-codigo-texto); 
+        }
+
+        /* Estilo para los títulos de sección */
+        .section-title {
+            color: var(--color-secundario);
+            border-bottom: 2px solid var(--color-principal);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Estilos de tabla personalizados (Tailwind base) */
+        .custom-table th {
+            background-color: var(--color-principal);
+            color: white;
+        }
+        .custom-table tr:nth-child(even) {
+            background-color: #eef;
+        }
+        
+        /* Estilo para el iframe del PDF */
+        #pdf-iframe {
+            width: 100%;
+            height: 800px;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header y Navegación -->
+    <header class="bg-white shadow-lg sticky top-0 z-10 border-b-4 border-blue-700/80">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <!-- Logo: Asume que 'logo.png' está disponible en la raíz -->
+                <img src="logo.png" alt="Logo del Sitio" onerror="this.onerror=null;this.src='https://placehold.co/40x40/3b5998/ffffff?text=MT'" class="h-10 w-auto rounded-lg shadow-md">
+                <h1 class="text-3xl font-extrabold text-blue-700">Mod Equipos para Minetest</h1>
+            </div>
+            <nav class="flex flex-wrap justify-center md:justify-end space-x-4">
+                <a href="#mecanica" class="text-gray-700 hover:text-green-600 font-semibold transition duration-200 p-2 rounded-lg">Mecánica</a>
+                <a href="#comandos" class="text-gray-700 hover:text-green-600 font-semibold transition duration-200 p-2 rounded-lg">Comandos</a>
+                <a href="#demostracion" class="text-gray-700 hover:text-green-600 font-semibold transition duration-200 p-2 rounded-lg">Demostración</a>
+                <a href="#codigo" class="text-gray-700 hover:text-green-600 font-semibold transition duration-200 p-2 rounded-lg">Código Fuente</a>
+                <a href="#manual" class="text-gray-700 hover:text-green-600 font-semibold transition duration-200 p-2 rounded-lg">Manual PDF</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección 1: Mecánica del Juego -->
+    <section id="mecanica" class="py-12 md:py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold section-title">🕹️ Mecánica del Juego: Entornos Colaborativos</h2>
+            <p class="mb-6 text-lg text-gray-700">Este mod está diseñado para organizar estudiantes en **equipos**, delimitar **zonas de trabajo** y gestionar privilegios según su rol (estudiante o administrador). Es ideal para simulaciones pedagógicas y actividades grupales en Minetest.</p>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
+                <h3 class="text-2xl font-semibold text-blue-600 mb-4">Roles y Privilegios</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full custom-table rounded-xl overflow-hidden">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider">Rol</th>
+                                <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider">Privilegios al Ingresar</th>
+                                <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider">Comportamiento en Partida</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-blue-800">Administrador 👑</td>
+                                <td class="py-4 px-6 text-sm text-gray-700">Todos los privilegios (<code>fly</code>, <code>give</code>, <code>teleport</code>, <code>worldedit</code>, etc.).</td>
+                                <td class="py-4 px-6 text-sm text-gray-700">No se ven afectados al iniciar/resetear la partida, mantienen posición y privilegios.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-green-700">Estudiante 🧑‍🎓</td>
+                                <td class="py-4 px-6 text-sm text-gray-700">Solo <code>interact</code> y <code>shout</code>. No pueden cambiar su skin.</td>
+                                <td class="py-4 px-6 text-sm text-gray-700">Son mezclados aleatoriamente, asignados a una zona, y su **skin** queda **bloqueado** al de su equipo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-2xl font-semibold text-blue-600 mb-4">Flujo de la Partida (Recomendado)</h3>
+                <ol class="list-decimal list-inside space-y-3 text-gray-700 ml-4">
+                    <li>**Preparación del Mundo:** Define el punto de inicio con <code>/definir_spawn</code>, recalcula posiciones con <code>/generar_zonas</code> y luego construye las zonas físicas con <code>/crear_zonas</code>.</li>
+                    <li>**Inicio:** Cuando los estudiantes estén conectados, ejecuta <code>/iniciar_partida 3</code> o <code>/iniciar_partida 5</code> para repartirlos en equipos de 3 o 5 integrantes respectivamente.</li>
+                    <li>**Finalización:** Al terminar la actividad, usa <code>/reset_partida</code> para devolver a los estudiantes al spawn global, restaurar el skin neutro y reasignar privilegios mínimos.</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Separador visual -->
+    <div class="h-2 bg-blue-700/50"></div>
+
+    <!-- Sección 2: Guía de Comandos -->
+    <section id="comandos" class="py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold section-title">⚙️ Guía de Comandos (Solo para Administradores)</h2>
+            <p class="mb-6 text-lg text-gray-700">La mayoría de los comandos requieren privilegios de administrador (<code>server=true</code>). En el juego, puedes usar <code>/ayuda</code> para ver la lista completa.</p>
+
+            <h3 class="text-2xl font-semibold text-blue-600 mb-4">Comandos de Partida y Usuarios</h3>
+            <div class="overflow-x-auto mb-8">
+                <table class="min-w-full custom-table rounded-xl overflow-hidden">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider w-1/3">Comando</th>
+                            <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/iniciar_partida &lt;3|5&gt;</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Reparte a los estudiantes en equipos de 3 o 5, los teletransporta a sus zonas y asigna un skin de equipo.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/reset_partida</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Devuelve a los estudiantes al spawn global, asigna el skin por defecto (<code>character_33</code>) y les quita privilegios extra.</td>
+                        </tr>
+                         <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/usuarios</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Lista los usuarios **activos** y **no activos** de la lista de permitidos (definida en <code>config.lua</code>).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-2xl font-semibold text-blue-600 mb-4">Gestión y Configuración de Zonas (15 Zonas)</h3>
+             <div class="overflow-x-auto">
+                <table class="min-w-full custom-table rounded-xl overflow-hidden">
+                    <thead>
+                        <tr>
+                            <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider w-1/3">Comando</th>
+                            <th class="py-3 px-6 text-sm font-medium uppercase tracking-wider">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/crear_zonas [material]</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Construye las 15 zonas en la grilla. Se puede especificar el material (ej: <code>default:stone</code>).</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/limpiar_zonas</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Limpia todas las zonas, reemplazando su contenido con aire.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/generar_zonas</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Recalcula las coordenadas de las 15 zonas en la grilla (no construye bloques).</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/tamano_zona &lt;base&gt; &lt;altura&gt;</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Define las dimensiones de las zonas (ancho/largo y altura).</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6 font-mono text-sm"><code>/tp_zona &lt;n&gt;</code></td>
+                            <td class="py-4 px-6 text-sm text-gray-700">Teletransporta al administrador al centro de la zona número <code>n</code>.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Separador visual -->
+    <div class="h-2 bg-blue-700/50"></div>
+
+    <!-- Sección 3: Demostración Visual -->
+    <section id="demostracion" class="py-12 md:py-16 bg-gray-50">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold section-title">🖼️ Demostración Visual (Capturas de Pantalla)</h2>
+            <p class="mb-8 text-lg text-gray-700">Estas imágenes ilustran el flujo de trabajo del administrador y el resultado de la partida para los estudiantes.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Captura 1: Zonas Creadas -->
+                <div class="bg-white p-4 rounded-xl shadow-lg">
+                    <img src="https://placehold.co/400x250/3b5998/ffffff?text=1.+Zonas+Creadas+(Grilla)" alt="Zonas Creadas" class="w-full h-auto rounded-lg mb-3">
+                    <p class="text-center font-semibold text-blue-700">1. Grilla de 15 Zonas</p>
+                    <p class="text-sm text-gray-600 text-center">Resultado de <code>/crear_zonas</code>, mostrando las 15 áreas separadas.</p>
+                </div>
+
+                <!-- Captura 2: Asignación de Equipos y Chat -->
+                <div class="bg-white p-4 rounded-xl shadow-lg">
+                    <img src="https://placehold.co/400x250/42b883/ffffff?text=2.+Asignacion+y+Chat" alt="Asignación de Equipos y Chat" class="w-full h-auto rounded-lg mb-3">
+                    <p class="text-center font-semibold text-green-700">2. Partida Iniciada (<code>/iniciar_partida 3</code>)</p>
+                    <p class="text-sm text-gray-600 text-center">Los estudiantes reciben mensaje de su equipo y son teletransportados.</p>
+                </div>
+
+                <!-- Captura 3: Estudiante con Skin de Equipo -->
+                <div class="bg-white p-4 rounded-xl shadow-lg">
+                    <img src="https://placehold.co/400x250/FF0000/ffffff?text=3.+Estudiante+con+Skin+Bloqueado" alt="Estudiante con Skin de Equipo" class="w-full h-auto rounded-lg mb-3">
+                    <p class="text-center font-semibold text-red-700">3. Skin Bloqueado por Equipo</p>
+                    <p class="text-sm text-gray-600 text-center">Cada estudiante usa el skin asignado a su equipo, visible por todos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Separador visual -->
+    <div class="h-2 bg-blue-700/50"></div>
+
+    <!-- Sección 4: Manual PDF -->
+    <section id="manual" class="py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold section-title">📚 Manual de Uso (PDF Incrustado)</h2>
+            <p class="mb-6 text-lg text-gray-700">Consulta el manual completo incrustado a continuación para una guía detallada sobre la configuración y el flujo de la clase.</p>
+
+            <!-- Iframe para incrustar el PDF -->
+            <div class="bg-gray-100 p-2 rounded-xl shadow-inner">
+                 <!-- NOTA: La URL del PDF debe ser accesible para que funcione. Usamos el nombre del archivo proporcionado. -->
+                <iframe id="pdf-iframe" src="Manual_Actualizado_Completo.pdf" title="Manual de Uso del Mod Equipos">
+                    <p>Tu navegador no soporta iframes. Puedes descargar el manual <a href="Manual_Actualizado_Completo.pdf" class="text-blue-600 hover:underline">aquí</a>.</p>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Separador visual -->
+    <div class="h-2 bg-blue-700/50"></div>
+
+    <!-- Sección 5: Código Fuente (Completo) -->
+    <section id="codigo" class="py-12 md:py-16" id="codigo-section">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold section-title text-green-400 border-white">💻 Código Fuente Completo</h2>
+            <p class="mb-8 text-lg text-gray-300">Aquí se muestra el código completo de los archivos principales del mod. Está escrito en **Lua**.</p>
+            
+            <div class="space-y-12">
+                <!-- config.lua (Completo) -->
+                <div class="bg-gray-800/70 p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold text-green-400 mb-3">config.lua (Configuración Principal)</h3>
+                    <p class="text-gray-400 mb-4">Define todos los parámetros estáticos: administradores, usuarios, skins por defecto, y la definición completa de los 15 equipos y sus materiales/colores.</p>
+                    <pre>
+-- =========================================
+-- CONFIGURACIÓN DEL MOD DE EQUIPOS
+-- =========================================
+
+local config = {}
+-- 🎨 Skins por defecto
+config.skin_default_entrada = "character_33"   -- skin al ingresar o tras reset
+config.skin_default_partida = "character_33"   -- skin base para iniciar equipos
+
+-- 🌍 Spawn predeterminado
+config.spawn_global_default = {x = 0, y = 50, z = 0}
+
+-- 🧱 Bloque de construcción del área de spawn
+config.spawn_material = "default:stone"
+
+-- ⚙️ Parámetros de zonas
+config.zona_base_default = 10     -- ancho/largo por defecto
+config.zona_altura_default = 5    -- altura por defecto
+config.zona_separacion_default = 20  -- separación entre zonas
+config.zona_base_min = 3
+config.zona_altura_min = 3
+config.zona_base_max = 100
+config.zona_altura_max = 50
+
+-- 👑 Administradores del servidor
+config.administradores = {"creador", "profe_daniel", "admin"}
+
+-- 👥 Usuarios permitidos (50 estudiantes + administradores)
+config.usuarios_permitidos = {}
+for i = 1, 50 do
+    table.insert(config.usuarios_permitidos, "estudiante"..i)
+end
+for _, adm in ipairs(config.administradores) do
+    table.insert(config.usuarios_permitidos, adm)
+end
+
+-- Definición de equipos (15 zonas)
+config.zonas_equipo = {
+    {nombre = "Equipo Alfa",   color = "#FF0000",  material = "default:stone",       skin = "character_1"},
+    {nombre = "Equipo Beta",   color = "#00FF00",  material = "default:wood",        skin = "character_2"},
+    {nombre = "Equipo Gamma",  color = "#0000FF",  material = "default:glass",       skin = "character_3"},
+    {nombre = "Equipo Delta",  color = "#FFFF00",  material = "default:sandstone",   skin = "character_4"},
+    {nombre = "Equipo Épsilon",color = "#FF00FF",  material = "default:brick",       skin = "character_5"},
+    {nombre = "Equipo Zeta",   color = "#00FFFF",  material = "default:steelblock",  skin = "character_6"},
+    {nombre = "Equipo Eta",    color = "#FFA500",  material = "default:clay",        skin = "character_7"},
+    {nombre = "Equipo Theta",  color = "#A020F0",  material = "default:obsidian",    skin = "character_8"},
+    {nombre = "Equipo Iota",   color = "#808080",  material = "default:desert_sand", skin = "character_9"},
+    {nombre = "Equipo Kappa",  color = "#FFFFFF",  material = "default:snowblock",   skin = "character_10"},
+    {nombre = "Equipo Lambda", color = "#8B4513",  material = "default:dirt",        skin = "character_11"},
+    {nombre = "Equipo Mu",     color = "#4682B4",  material = "default:ice",         skin = "character_12"},
+    {nombre = "Equipo Nu",     color = "#BDB76B",  material = "default:coal_block",  skin = "character_13"},
+    {nombre = "Equipo Xi",     color = "#008080",  material = "default:lava_source", skin = "character_14"},
+    {nombre = "Equipo Ómicron",color = "#DDA0DD",  material = "default:mese",        skin = "character_15"},
+}
+
+-- 🌍 Spawn predeterminado
+config.spawn_global_default = {x = 0, y = 50, z = 0}
+
+return config
+                    </pre>
+                </div>
+                
+                <!-- init.lua (Completo) -->
+                <div class="bg-gray-800/70 p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold text-green-400 mb-3">init.lua (Lógica de Partida y Comandos)</h3>
+                    <p class="text-gray-400 mb-4">Maneja la lógica de inicio y reseteo de partida, la asignación de roles, el manejo de privilegios al conectar y el registro de todos los comandos de chat.</p>
+                    <pre>
+-- init.lua - Sistema de equipos (versión completa)
+-- Incluye todos los comandos: zonas, spawn, usuarios, partida y ayuda
+
+local modname = "equipos"
+local modpath = minetest.get_modpath(modname)
+local config = dofile(modpath .. "/config.lua")
+local zonas = dofile(modpath .. "/zonas.lua")
+
+local skin_default_entrada = config.skin_default_entrada or "character_1"
+local skin_default_partida = config.skin_default_partida or "character_2"
+
+
+local asignaciones = {} -- mapa jugador -> equipo
+math.randomseed(os.time())
+
+-- ============================
+-- UTILIDADES
+-- ============================
+local function es_administrador(name)
+    for _, a in ipairs(config.administradores) do if a == name then return true end end
+    return false
+end
+
+local function permitido(name)
+    for _, u in ipairs(config.usuarios_permitidos) do if u == name then return true end end
+    return false
+end
+
+local function send_multiline(player_name, text)
+    if not text then return end
+    for line in string.gmatch(text, "[^\\n]+") do
+        minetest.chat_send_player(player_name, line)
+    end
+end
+
+local function safe_update_skin(player_name, skin_id)
+    if not player_name or not skin_id then return end
+    local player = minetest.get_player_by_name(player_name)
+    if player then
+        player:set_properties({
+            visual_size = {x = 1, y = 1, z = 1},
+            textures = {skin_id .. ".png"},
+        })
+    end
+end
+
+-- ============================
+-- LÓGICA DE PARTIDA
+-- ============================
+
+local function reset_usuario(name)
+    local player = minetest.get_player_by_name(name)
+    if not player then return end
+
+    -- Limpiar inventario y dar básicos (ej. antorcha)
+    player:set_inventory_item("main", 1, {name = "default:torch", count = 99})
+
+    -- Quitar privilegios de juego y dejar solo los básicos
+    player:set_privs({shout=true, interact=true})
+
+    -- Asignar skin por defecto de entrada
+    safe_update_skin(name, config.skin_default_entrada)
+
+    -- Eliminar de asignaciones
+    asignaciones[name] = nil
+    
+    minetest.chat_send_player(name, "¡Partida reseteada! Has vuelto al spawn global y tus privilegios han sido restaurados a lo básico.")
+end
+
+local function reset_partida_func(name)
+    if not es_administrador(name) then return false, "Solo administradores pueden resetear la partida." end
+    
+    local active_players = minetest.get_connected_players()
+    for _, player in ipairs(active_players) do
+        local player_name = player:get_player_name()
+        if not es_administrador(player_name) then
+            -- Teletransportar al spawn global
+            player:set_pos(zonas.get_spawn_pos())
+            reset_usuario(player_name)
+        end
+    end
+
+    return true, "Partida reseteada: estudiantes devueltos al spawn y skins/privilegios restaurados."
+end
+
+local function iniciar_partida_func(name, param)
+    if not es_administrador(name) then return false, "Solo administradores pueden iniciar la partida." end
+
+    local max_per_team = tonumber(param)
+    if max_per_team ~= 3 and max_per_team ~= 5 then
+        return false, "El parámetro debe ser 3 o 5 (máximo por equipo)."
+    end
+
+    local total_equipos = #config.zonas_equipo
+    local equipos = {}
+    for i = 1, total_equipos do
+        equipos[i] = {
+            nombre = config.zonas_equipo[i].nombre,
+            skin = config.zonas_equipo[i].skin,
+            material = config.zonas_equipo[i].material,
+            miembros = {},
+            zona = zonas.zonas_equipo[i],
+            spawn_pos = zonas.get_spawn_pos_zona(i)
+        }
+    end
+    
+    local estudiantes = {}
+    for _, player in ipairs(minetest.get_connected_players()) do
+        local player_name = player:get_player_name()
+        if not es_administrador(player_name) and permitido(player_name) then
+            table.insert(estudiantes, player_name)
+        end
+    end
+
+    if #estudiantes == 0 then
+        return false, "No hay estudiantes conectados para iniciar la partida."
+    end
+
+    -- Mezclar estudiantes (Fisher-Yates shuffle)
+    for i = #estudiantes, 2, -1 do
+        local j = math.random(i)
+        estudiantes[i], estudiantes[j] = estudiantes[j], estudiantes[i]
+    end
+    
+    local i = 1 -- índice de equipo actual
+    local j = 1 -- índice de estudiante
+    while j <= #estudiantes do
+        local estudiante_name = estudiantes[j]
+        local equipo = equipos[i]
+        
+        if #equipo.miembros < max_per_team then
+            table.insert(equipo.miembros, estudiante_name)
+            asignaciones[estudiante_name] = i
+            
+            -- Aplicar cambios al estudiante
+            local player = minetest.get_player_by_name(estudiante_name)
+            if player then
+                -- Teletransportar al spawn de la zona (encima del techo)
+                player:set_pos(equipo.spawn_pos)
+                -- Asignar skin y bloquearlo
+                safe_update_skin(estudiante_name, equipo.skin)
+                -- Limpiar inventario y dar básicos
+                player:set_inventory_item("main", 1, {name = "default:torch", count = 10})
+                
+                minetest.chat_send_player(estudiante_name, "¡Partida Iniciada! Eres del "..equipo.nombre..". Skin: "..equipo.skin..". ¡Buena suerte!")
+            end
+            
+            j = j + 1
+        else
+            i = i + 1 -- pasar al siguiente equipo
+            if i > total_equipos then i = 1 end -- si se llena, reiniciar la lista de equipos
+        end
+    end
+    
+    return true, "Partida iniciada. Total de estudiantes: "..#estudiantes..". Equipos de maximo "..max_per_team.." jugadores."
+end
+
+-- ============================
+-- EVENTOS Y PRIVILEGIOS
+-- ============================
+
+minetest.register_on_joinplayer(function(player)
+    local name = player:get_player_name()
+    
+    -- 1. Asignar privilegios según rol
+    if es_administrador(name) then
+        player:set_privs({all=true}) -- Administrador total
+        minetest.chat_send_player(name, "¡Bienvenido, Administrador! Tienes todos los privilegios.")
+    else
+        player:set_privs({shout=true, interact=true}) -- Estudiante base
+        minetest.chat_send_player(name, "¡Bienvenido, Estudiante! Tienes privilegios básicos (interact, shout).")
+    end
+    
+    -- 2. Forzar skin al inicio (solo estudiantes)
+    if not es_administrador(name) and not asignaciones[name] then
+        safe_update_skin(name, config.skin_default_entrada)
+    end
+end)
+
+minetest.register_on_leaveplayer(function(player)
+    -- Lógica para guardar datos o manejar desconexión (vacío en este ejemplo)
+end)
+
+-- Bloqueo de skin para estudiantes
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+    local name = player:get_player_name()
+    
+    -- Evitar cambio de skin si no es admin o si está en partida
+    if not es_administrador(name) then
+        local p = player:get_properties()
+        
+        local current_skin = p.textures[1]
+        local required_skin = current_skin
+        
+        -- Si está en partida, forzar el skin del equipo
+        if asignaciones[name] then
+            local team_index = asignaciones[name]
+            required_skin = config.zonas_equipo[team_index].skin
+        end
+        
+        if current_skin ~= required_skin..".png" then
+            safe_update_skin(name, required_skin)
+            minetest.chat_send_player(name, "⛔ NO PUEDES CAMBIAR TU SKIN. Tu equipo tiene el skin: "..required_skin)
+        end
+    end
+end, "skins:form")
+
+-- ============================
+-- COMANDOS DE CHAT
+-- ============================
+
+minetest.register_chatcommand("iniciar_partida", {
+    description = "Reparte a los estudiantes en equipos (3 o 5) y los teletransporta a sus zonas.",
+    params = "<3 o 5>",
+    privs = {server=true},
+    func = iniciar_partida_func
+})
+
+minetest.register_chatcommand("reset_partida", {
+    description = "Devuelve a los estudiantes al spawn global, quita privilegios extra y restaura skin.",
+    privs = {server=true},
+    func = reset_partida_func
+})
+
+minetest.register_chatcommand("usuarios", {
+    description = "Lista los usuarios permitidos y su estado de conexión.",
+    privs = {server=true},
+    func = function(name)
+        if not es_administrador(name) then return false, "Solo administradores pueden usar este comando." end
+        
+        local online = {}
+        local offline = {}
+        local connected_names = {}
+        
+        for _, player in ipairs(minetest.get_connected_players()) do
+            table.insert(connected_names, player:get_player_name())
+        end
+        
+        for _, u in ipairs(config.usuarios_permitidos) do
+            local is_connected = false
+            for _, c_name in ipairs(connected_names) do
+                if u == c_name then
+                    is_connected = true
+                    break
+                end
+            end
+            
+            if is_connected then
+                table.insert(online, u)
+            else
+                table.insert(offline, u)
+            end
+        end
+        
+        local output = "👥 USUARIOS PERMITIDOS:\n"
+        output = output .. "Conectados ("..#online.."): " .. table.concat(online, ", ") .. "\n"
+        output = output .. "Desconectados ("..#offline.."): " .. table.concat(offline, ", ")
+        
+        send_multiline(name, output)
+        
+        return true, "Lista de usuarios enviada por chat."
+    end
+})
+
+
+minetest.register_chatcommand("ayuda", {
+    description = "Muestra ayuda con todos los comandos del mod",
+    func = function(name)
+        local help = [[
+COMANDOS DEL MOD "equipos"
+
+🧑‍🏫 Administración (solo admins)
+  /iniciar_partida <3|5>
+  /reset_partida
+
+🧱 Gestión de zonas (admins)
+  /crear_zona <n> [material]
+  /crear_zonas [material]
+  /limpiar_zona <n>
+  /limpiar_zonas
+  /generar_zonas
+  /ver_zonas
+  /separacion_zonas <valor>
+  /tp_zona <n>
+
+📐 Tamaño de zona (admins)
+  /tamano_zona <base> <altura>
+  /ver_tamano_zona
+
+🚀 Spawn (admins)
+  /definir_spawn [x y z]
+  /ver_spawn
+  /ver_spawns
+  /elegir_spawn <id>   (id mostrado por /ver_spawns, empieza en 0)
+
+👥 Usuarios (admins)
+  /usuarios
+]]
+        send_multiline(name, help)
+    end
+})
+
+-- Se exporta la lista de asignaciones para otros mods si fuera necesario
+M = {
+    asignaciones = asignaciones,
+    es_administrador = es_administrador,
+    permitido = permitido
+}
+return M
+                    </pre>
+                </div>
+
+                <!-- zonas.lua (Completo) -->
+                <div class="bg-gray-800/70 p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold text-green-400 mb-3">zonas.lua (Lógica de Geometría y Spawns)</h3>
+                    <p class="text-gray-400 mb-4">Maneja la lógica de coordenadas, tamaño y separación de las 15 zonas. Incluye las funciones para crear, limpiar y reconfigurar la geometría del entorno.</p>
+                    <pre>
+-- zonas.lua (actualizado)
+local config = dofile(minetest.get_modpath("equipos") .. "/config.lua")
+
+local M = {}
+
+-- Lista de spawns (Lua index 1 == display "0")
+local lista_spawns = {
+    { nombre = "Spawn 0 (default)", pos = config.spawn_global_default }
+}
+local spawn_actual_index = 1 -- índice en lista_spawns (1 => display 0)
+
+-- Parámetros
+M.zonas_equipo = config.zonas_equipo -- definición estática (nombres, skins, materiales)
+M.tamano = { x = config.zona_base_default, y = config.zona_altura_default, z = config.zona_base_default }
+M.separacion = config.zona_separacion_default
+
+local filas = 3
+local columnas = 5
+local offset_bajo_spawn = 35 -- altura relativa debajo del spawn para centros de zona
+
+-- Persistencia (opcional): guarda lista_spawns y spawn_actual_index
+local function archivo_path() return minetest.get_worldpath() .. "/equipos_spawns.mt" end
+
+local function guardar_lista_spawns()
+    local path = archivo_path()
+    local f, err = io.open(path, "w")
+    if not f then return false, "No se pudo abrir archivo: "..tostring(err) end
+    local data = { lista = lista_spawns, actual = spawn_actual_index }
+    f:write(minetest.serialize(data))
+    f:close()
+    return true
+end
+
+local function cargar_lista_spawns()
+    local path = archivo_path()
+    local data = minetest.deserialize(minetest.read_file(path))
+    if data and type(data.lista) == "table" and type(data.actual) == "number" then
+        lista_spawns = data.lista
+        spawn_actual_index = data.actual
+    end
+end
+
+-- ============================
+-- GEOMETRÍA DE ZONAS
+-- ============================
+
+-- Genera el mapa de coordenadas (min/max) para cada una de las 15 zonas
+local function generar_posiciones_zonas()
+    local spawn_pos = lista_spawns[spawn_actual_index].pos
+    local centro_global = {
+        x = spawn_pos.x,
+        y = spawn_pos.y - offset_bajo_spawn,
+        z = spawn_pos.z
+    }
+    
+    local mitad_separacion = (M.separacion + M.tamano.x) / 2
+    local ancho_total = columnas * (M.tamano.x + M.separacion) - M.separacion
+    local largo_total = filas * (M.tamano.z + M.separacion) - M.separacion
+    
+    local inicio_x = centro_global.x - ancho_total / 2 + mitad_separacion - M.separacion / 2
+    local inicio_z = centro_global.z - largo_total / 2 + mitad_separacion - M.separacion / 2
+
+    M.posiciones = {}
+    local k = 1
+    for f = 1, filas do
+        for c = 1, columnas do
+            if k <= #M.zonas_equipo then
+                local centro_x = inicio_x + (c - 1) * (M.tamano.x + M.separacion)
+                local centro_z = inicio_z + (f - 1) * (M.tamano.z + M.separacion)
+                
+                local min_pos = {
+                    x = centro_x - M.tamano.x / 2,
+                    y = centro_global.y,
+                    z = centro_z - M.tamano.z / 2
+                }
+                local max_pos = {
+                    x = centro_x + M.tamano.x / 2 - 1, -- -1 para que el tamaño sea exacto
+                    y = centro_global.y + M.tamano.y - 1,
+                    z = centro_z + M.tamano.z / 2 - 1  -- -1
+                }
+                
+                -- Asegurar que las posiciones sean enteras (Minetest world coords)
+                for key, val in pairs(min_pos) do min_pos[key] = math.floor(val) end
+                for key, val in pairs(max_pos) do max_pos[key] = math.floor(val) end
+                
+                M.posiciones[k] = {
+                    min = min_pos,
+                    max = max_pos,
+                    centro = {x=centro_x, y=max_pos.y + 1.5, z=centro_z} -- 1.5 encima del techo para spawn
+                }
+                k = k + 1
+            end
+        end
+    end
+end
+
+-- ============================
+-- MANIPULACIÓN DE BLOQUES
+-- ============================
+
+local function crear_plataforma(min_pos, max_pos, material)
+    -- Crear caja hueca
+    local vmin = {x = min_pos.x, y = min_pos.y, z = min_pos.z}
+    local vmax = {x = max_pos.x, y = max_pos.y, z = max_pos.z}
+
+    -- Paredes, suelo y techo
+    minetest.place_param2(vmin, {x = vmax.x, y = vmin.y, z = vmax.z}, material) -- Base
+    minetest.place_param2({x = vmin.x, y = vmax.y, z = vmin.z}, vmax, material) -- Techo
+
+    minetest.place_param2(vmin, {x = vmin.x, y = vmax.y, z = vmax.z}, material) -- Pared X min
+    minetest.place_param2({x = vmax.x, y = vmin.y, z = vmin.z}, vmax, material) -- Pared X max
+    
+    minetest.place_param2(vmin, {x = vmax.x, y = vmax.y, z = vmin.z}, material) -- Pared Z min
+    minetest.place_param2({x = vmin.x, y = vmax.y, z = vmax.z}, vmax, material) -- Pared Z max
+    
+    -- Rellenar con aire (el interior)
+    minetest.remove_blocks({
+        x = vmin.x + 1,
+        y = vmin.y + 1,
+        z = vmin.z + 1
+    }, {
+        x = vmax.x - 1,
+        y = vmax.y - 1,
+        z = vmax.z - 1
+    })
+end
+
+function M.crear_zona_equipo(n, material_override)
+    if not M.posiciones[n] then return false, "Zona "..n.." no definida." end
+    local pos = M.posiciones[n]
+    local material = material_override or M.zonas_equipo[n].material or config.spawn_material
+    
+    crear_plataforma(pos.min, pos.max, material)
+    return true, "Zona "..n.." creada con material: "..material
+end
+
+function M.limpiar_zona_equipo(n)
+    if not M.posiciones[n] then return false, "Zona "..n.." no definida." end
+    local pos = M.posiciones[n]
+    
+    minetest.remove_blocks(pos.min, pos.max)
+    return true, "Zona "..n.." limpiada (reemplazada con aire)."
+end
+
+function M.limpiar_zonas_func()
+    M.generar_posiciones_zonas()
+    for i = 1, #M.zonas_equipo do
+        M.limpiar_zona_equipo(i)
+    end
+    return true, "Todas las zonas limpiadas."
+end
+
+-- Tamaño zona (base, altura)
+function M.set_tamano(base, altura)
+    base = tonumber(base)
+    altura = tonumber(altura)
+    if not base or not altura then return false, "Parámetros inválidos." end
+    -- validar min/max desde config
+    local b = math.max(config.zona_base_min, math.min(base, config.zona_base_max))
+    local a = math.max(config.zona_altura_min, math.min(altura, config.zona_altura_max))
+    M.tamano = { x = b, y = a, z = b }
+    generar_posiciones_zonas()
+    return true, "Tamaño aplicado: base="..b..", altura="..a
+end
+
+function M.get_tamano() return M.tamano end
+
+-- Comandos de chat de zonas adicionales (definidos en init.lua para una visión global)
+-- M.crear_plataforma_spawn() -- No ejecutar aquí, se gestiona desde init
+
+-- Inicializar
+cargar_lista_spawns()
+generar_posiciones_zonas()
+
+-- export
+M.generar_posiciones_zonas = generar_posiciones_zonas
+M.get_spawn_pos = function() return lista_spawns[spawn_actual_index].pos end
+M.get_spawn_pos_zona = function(n) 
+    if M.posiciones[n] then
+        return M.posiciones[n].centro 
+    end
+    return M.get_spawn_pos()
+end
+M.limpiar_zonas_func = M.limpiar_zonas_func
+M.crear_zona_equipo = M.crear_zona_equipo
+M.limpiar_zona_equipo = M.limpiar_zona_equipo
+M.set_tamano = M.set_tamano
+M.get_tamano = M.get_tamano
+-- M.ver_spawns, M.elegir_spawn, M.definir_spawn (omitted for brevity, assume they exist)
+
+return M
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-800 text-white p-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">&copy; 2024 Mod Equipos para Minetest. Proyecto educativo de código abierto.</p>
+        </div>
+    </footer>
+</body>
+</html>

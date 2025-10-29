@@ -1,0 +1,62 @@
+# Archivos específicos de Windows
+desktop.ini
+Thumbs.db
+*.tmp
+
+# Archivos de mundo y configuración local
+world.mt
+map_meta.txt
+*.backup
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Archivos de configuración local del usuario
+*.conf.local
+minetest.conf
+
+# Archivos temporales y logs
+debug.txt
+*.log
+*.old
+
+# Archivos de cache
+cache/
+*.cache
+
+# Archivos de mapas generados dinámicamente
+map_*.png
+schematic_*.mts
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Archivos de desarrollo
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos de texturas temporales
+*.xcf
+*.psd
+*.ai
+
+# Archivos de audio temporales
+*.aup
+*.aup3
+
+# Directorios de compilación o instalación
+build/
+dist/
+node_modules/
+
+# Archivos de configuración específicos del entorno
+config_local.lua
+settings_local.lua
