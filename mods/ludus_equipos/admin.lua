@@ -236,7 +236,7 @@ local function show_admin_formspec(name, tabidx)
       :format(MARGIN_X, LAST_MSG_Y, FS_W - 2 * MARGIN_X, LAST_MSG_H, minetest.formspec_escape(last)))
   end
   table.insert(fs, button_exit_at(FS_W - 3.2, FS_H - 1.0, "btn_cerrar", "Cerrar"))
-  minetest.show_formspec(name, "equipos:admin_help", table.concat(fs, ""))
+  minetest.show_formspec(name, "ludus_equipos:admin_help", table.concat(fs, ""))
 end
 
 -- ---------------- Registro de eventos (sin cambios funcionales) ----------------
@@ -246,7 +246,7 @@ end
 
 -- Manejo de eventos (mantenemos toda la lógica previa, sin cambios en nombres/acciones)
 minetest.register_on_player_receive_fields(function(player, formname, fields)
-  if formname ~= "equipos:admin_help" then return end
+  if formname ~= "ludus_equipos:admin_help" then return end
   if not player or not player.is_player or not player:is_player() then return end
   local name = player:get_player_name()
   if not es_administrador(name) then return end
@@ -484,7 +484,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 end)
 
 -- Ítem y comando para abrir panel (sin cambios)
-minetest.register_craftitem("equipos:manual_admin", {
+minetest.register_craftitem("ludus_equipos:manual_admin", {
   description = "📘 Manual Admin - CodeCraft Academy\nDesarrollado por profeDaniel & GitHub Copilot",
   inventory_image = "default_book.png^[colorize:#0066FF:100",
   stack_max = 1,

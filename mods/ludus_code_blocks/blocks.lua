@@ -2,7 +2,7 @@
 -- Estas son referencias a texturas que ya existen en Luanti
 
 -- Bloque Terminal de Programación
-minetest.register_node("code_blocks:programming_terminal", {
+minetest.register_node("ludus_code_blocks:programming_terminal", {
     description = "💻 Terminal de Programación\n" ..
                   "Desarrollado por profeDaniel & GitHub Copilot\n" ..
                   "Clic derecho para abrir editor de código",
@@ -55,7 +55,7 @@ minetest.register_node("code_blocks:programming_terminal", {
 })
 
 -- Bloque Servidor de Código (para proyectos compartidos)
-minetest.register_node("code_blocks:code_server", {
+minetest.register_node("ludus_code_blocks:code_server", {
     description = "🖥️ Servidor de Código\n" ..
                   "Para proyectos compartidos del equipo\n" ..
                   "Desarrollado por profeDaniel & GitHub Copilot",
@@ -106,7 +106,7 @@ minetest.register_node("code_blocks:code_server", {
 })
 
 -- Monitor de Resultados (muestra salida de programas)
-minetest.register_node("code_blocks:result_monitor", {
+minetest.register_node("ludus_code_blocks:result_monitor", {
     description = "📺 Monitor de Resultados\n" ..
                   "Muestra la salida de tus programas\n" ..
                   "Desarrollado por profeDaniel & GitHub Copilot",

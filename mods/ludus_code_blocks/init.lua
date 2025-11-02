@@ -18,7 +18,7 @@ code_blocks = {
 }
 
 -- Obtener rutas del mod
-local modpath = minetest.get_modpath("code_blocks")
+local modpath = minetest.get_modpath("ludus_code_blocks")
 
 -- Función auxiliar para dividir strings
 local function split_string(str, delimiter)

@@ -1,5 +1,5 @@
 -- Registro de eventos de partida: penalizaciones, puntos, vidas, acciones admin
-local modname = "equipos"
+local modname = "ludus_equipos"
 local modpath = minetest.get_modpath(modname)
 local worldpath = minetest.get_worldpath()
 local registro_path = worldpath .. "/equipos_registro.mt"
@@ -77,8 +77,8 @@ end
 cargar()
 
 -- Exponer en API global (si existe) y como chatcommands útiles
-_G.equipos_api = _G.equipos_api or {}
-_G.equipos_api.registro = Registro
+_G.ludus_equipos_api = _G.ludus_equipos_api or {}
+_G.ludus_equipos_api.registro = Registro
 
 if minetest.register_chatcommand then
   minetest.register_chatcommand("ver_registro", {

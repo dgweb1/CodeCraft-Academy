@@ -176,7 +176,7 @@ end
 -- Actualizar LED del Arduino (efecto visual)
 function editor.update_arduino_led(pos, is_on)
     local node = minetest.get_node(pos)
-    if node.name == "arduino_sim:arduino_uno" then
+    if node.name == "ludus_arduino_sim:arduino_uno" then
         -- Cambiar intensidad de luz según estado LED
         local new_light = is_on and 8 or 4
         minetest.swap_node(pos, {

@@ -14,7 +14,7 @@ arduino_sim = {
     authors = {"profeDaniel", "GitHub Copilot"}
 }
 
-local modpath = minetest.get_modpath("arduino_sim")
+local modpath = minetest.get_modpath("ludus_arduino_sim")
 
 -- Cargar módulos
 dofile(modpath .. "/components.lua")  -- Componentes virtuales
@@ -23,7 +23,7 @@ dofile(modpath .. "/editor.lua")     -- Editor de código Arduino
 dofile(modpath .. "/simulator.lua")  -- Motor de simulación
 
 -- Registro de bloques Arduino
-minetest.register_node("arduino_sim:arduino_uno", {
+minetest.register_node("ludus_arduino_sim:arduino_uno", {
     description = "🤖 Arduino UNO Virtual\n" ..
                   "Placa de desarrollo para aprender programación\n" ..
                   "Desarrollado por profeDaniel & GitHub Copilot",
@@ -64,7 +64,7 @@ minetest.register_node("arduino_sim:arduino_uno", {
 })
 
 -- LED Virtual
-minetest.register_node("arduino_sim:led_red", {
+minetest.register_node("ludus_arduino_sim:led_red", {
     description = "🔴 LED Rojo Virtual\n" ..
                   "Conectable al Arduino - Pin digital",
     

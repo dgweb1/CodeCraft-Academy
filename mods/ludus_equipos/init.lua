@@ -1,5 +1,5 @@
 -- init.lua - Sistema de equipos (consolida comandos, panel admin y fixes)
-local modname = "equipos"
+local modname = "ludus_equipos"
 local modpath = minetest.get_modpath(modname)
 local config  = dofile(modpath .. "/config.lua")
 
@@ -55,6 +55,7 @@ end
 local zonas_file   = worldpath .. "/equipos_zonas.mt"
 local spawns_file  = worldpath .. "/equipos_spawns.mt"
 local pausados_file= worldpath .. "/equipos_pausados.mt"
+local pausados = {} -- tabla para jugadores pausados
 
 -- Cargar datos de zonas/spawns/pausados si existen y volcarlos en el módulo zonas o en tablas locales
 do
@@ -219,23 +220,23 @@ end
 -- ========= Vidas y puntos =========
 local function get_vidas(name)
   local p = minetest.get_player_by_name(name); if not p then return config.vidas_iniciales end
-  local n = tonumber(p:get_meta():get_string("equipos:vidas"))
+  local n = tonumber(p:get_meta():get_string("ludus_equipos:vidas"))
   if not n then return config.vidas_iniciales end
   return n
 end
 local function set_vidas(name, n)
   local p = minetest.get_player_by_name(name); if not p then return end
-  p:get_meta():set_string("equipos:vidas", tostring(n))
+  p:get_meta():set_string("ludus_equipos:vidas", tostring(n))
 end
 local function get_puntos(name)
   local p = minetest.get_player_by_name(name); if not p then return config.puntos_iniciales end
-  local n = tonumber(p:get_meta():get_string("equipos:puntos"))
+  local n = tonumber(p:get_meta():get_string("ludus_equipos:puntos"))
   if not n then return config.puntos_iniciales end
   return n
 end
 local function set_puntos(name, n)
   local p = minetest.get_player_by_name(name); if not p then return end
-  p:get_meta():set_string("equipos:puntos", tostring(n))
+  p:get_meta():set_string("ludus_equipos:puntos", tostring(n))
 end
 
 local function perder_vida(name, motivo)
@@ -531,8 +532,8 @@ minetest.register_on_joinplayer(function(player)
   local name = player:get_player_name()
 
   -- inicializar vidas/puntos si faltan
-  if tonumber(player:get_meta():get_string("equipos:vidas")) == nil then set_vidas(name, config.vidas_iniciales) end
-  if tonumber(player:get_meta():get_string("equipos:puntos")) == nil then set_puntos(name, config.puntos_iniciales) end
+  if tonumber(player:get_meta():get_string("ludus_equipos:vidas")) == nil then set_vidas(name, config.vidas_iniciales) end
+  if tonumber(player:get_meta():get_string("ludus_equipos:puntos")) == nil then set_puntos(name, config.puntos_iniciales) end
 
   local spawn = (zonas.get_spawn_actual and zonas.get_spawn_actual()) or config.spawn_global_default
   if spawn then player:set_pos(spawn) end
@@ -545,8 +546,8 @@ minetest.register_on_joinplayer(function(player)
     minetest.chat_send_player(name, "👑 Bienvenido administrador.")
     -- Dar Manual Admin
     local inv = player:get_inventory()
-    if inv and not inv:contains_item("main", "equipos:manual_admin") then
-      inv:add_item("main", "equipos:manual_admin")
+    if inv and not inv:contains_item("main", "ludus_equipos:manual_admin") then
+      inv:add_item("main", "ludus_equipos:manual_admin")
     end
   else
     minetest.set_player_privs(name, { shout = true, interact = true })
@@ -686,7 +687,6 @@ minetest.register_chatcommand("reset_partida", {
 })
 
 -- ========= Zona de castigo =========
-local pausados = pausados or {}
 local function guardar_castigo() save_table(castigo_file, {pos = zona_castigo_pos, dur = zona_castigo_duracion}) end
 
 local function aplicar_castigo(objetivo, motivo_txt)

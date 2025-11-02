@@ -20,7 +20,7 @@ function components.connect_led(led_pos, player_name)
                 }
                 
                 local node = minetest.get_node(check_pos)
-                if node.name == "arduino_sim:arduino_uno" then
+                if node.name == "ludus_arduino_sim:arduino_uno" then
                     local dist = vector.distance(led_pos, check_pos)
                     if dist < min_dist then
                         arduino_pos = check_pos
@@ -84,7 +84,7 @@ function components.find_connected_leds(arduino_pos)
                 }
                 
                 local node = minetest.get_node(check_pos)
-                if node.name == "arduino_sim:led_red" then
+                if node.name == "ludus_arduino_sim:led_red" then
                     local meta = minetest.get_meta(check_pos)
                     local connected_to = meta:get_string("connected_arduino")
                     
